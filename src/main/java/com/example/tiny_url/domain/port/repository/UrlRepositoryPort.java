@@ -8,9 +8,8 @@ public interface UrlRepositoryPort {
 
     List<Url> findAll();
     Url findByIdOrAlias(String id);
-    Url redirectToUrl(String id);
     Url createUrl(Url url);
-    Url updateUrl(Url url);
-    void deleteUrl(String id);
+    Url updateUrl(Url url, String id);
+    Url deleteUrl(String id);
 
 }

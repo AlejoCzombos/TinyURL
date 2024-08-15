@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Document(collection = "url")
 public class UrlEntity {
-    private String id;
+    @Indexed(unique = true)
+    private String key;
     private String url;
     private int hit;
     private String alias;

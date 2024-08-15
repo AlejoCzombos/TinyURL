@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UrlDto {
-    private String id;
+    private String key;
     private String url;
     private String alias;
     private int hit;

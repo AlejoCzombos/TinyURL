@@ -1,8 +1,7 @@
 package com.example.tiny_url.domain.model.dto.request;
 
 import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,17 +14,16 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UrlRequest {
+public class UrlUpdate {
 
-    @NotNull(message = "")
-    @NotEmpty(message = "")
-    @Size(min = 5, max = 80, message = "")
+    @Size(min = 5, max = 80, message = "The URL must be between 5 and 80 characters.")
+    @NotBlank(message = "The URL must not be blank.")
     private String url;
 
-    @NotEmpty(message = "")
-    @Size(max = 25, message = "")
+    @Size(max = 25, message = "The alias must be less than 25 characters.")
+    @NotBlank(message = "The alias must not be blank.")
     private String alias;
 
-    @Future(message = "")
+    @Future(message = "The expiration date must be in the future.")
     private LocalDateTime expiresAt;
 }
