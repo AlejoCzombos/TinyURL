@@ -10,8 +10,9 @@ import java.util.Optional;
 @Repository
 public interface UrlMongoDBRepository extends MongoRepository<UrlEntity, String>{
 
-    @Query("{ $or: [ { 'id': ?0 }, { 'alias': ?0 } ] }")
-    Optional<UrlEntity> findByIdOrAlias(String idOrAlias);
+    @Query("{ $or: [ { 'key': ?0 }, { 'alias': ?0 } ] }")
+    Optional<UrlEntity> findByKeyOrAlias(String idOrAlias);
 
+    boolean existsByKey(String key);
     boolean existsByAlias(String alias);
 }

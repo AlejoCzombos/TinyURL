@@ -7,9 +7,9 @@ import java.util.List;
 public interface UrlRepositoryPort {
 
     List<Url> findAll();
-    Url findByIdOrAlias(String id);
+    Url findByKeyOrAlias(String key);
     Url createUrl(Url url);
-    Url updateUrl(Url url, String id);
-    Url deleteUrl(String id);
+    Url updateUrl(Url url, String key);
+    Url deleteUrl(String key);
 
 }

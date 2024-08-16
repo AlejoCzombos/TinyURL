@@ -28,8 +28,8 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    public UrlDto findByIdOrAlias(String idOrAlias) {
-        Url url = repository.findByIdOrAlias(idOrAlias);
+    public UrlDto findByKeyOrAlias(String keyOrAlias) {
+        Url url = repository.findByKeyOrAlias(keyOrAlias);
 
         return UrlDtoMapper.toDto(url);
     }
@@ -44,17 +44,17 @@ public class UrlServiceImpl implements UrlService {
     }
 
     @Override
-    public UrlDto updateUrl(UrlUpdate request, String id) {
+    public UrlDto updateUrl(UrlUpdate request, String key) {
         Url urlToUpdate = UrlUpdateMapper.toDomain(request);
 
-        Url urlUpdated = repository.updateUrl(urlToUpdate, id);
+        Url urlUpdated = repository.updateUrl(urlToUpdate, key);
 
         return UrlDtoMapper.toDto(urlUpdated);
     }
 
     @Override
-    public UrlDto deleteUrl(String id) {
-        Url urlDeleted = repository.deleteUrl(id);
+    public UrlDto deleteUrl(String key) {
+        Url urlDeleted = repository.deleteUrl(key);
 
         return UrlDtoMapper.toDto(urlDeleted);
     }

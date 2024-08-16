@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface UrlService {
     List<UrlDto> findAll();
-    UrlDto findByIdOrAlias(String idOrAlias);
+    UrlDto findByKeyOrAlias(String keyOrAlias);
     UrlDto createUrl(UrlCreate request);
-    UrlDto updateUrl(UrlUpdate request, String id);
-    UrlDto deleteUrl(String id);
+    UrlDto updateUrl(UrlUpdate request, String key);
+    UrlDto deleteUrl(String key);
 }

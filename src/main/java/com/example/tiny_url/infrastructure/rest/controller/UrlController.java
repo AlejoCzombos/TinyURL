@@ -24,7 +24,7 @@ public class UrlController implements UrlControllerApi {
 
     @Override
     public ResponseEntity<UrlDto> getUrlByIdOrAlias(String id) {
-        return new ResponseEntity<>(service.findByIdOrAlias(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.findByKeyOrAlias(id), HttpStatus.OK);
     }
 
     @Override
