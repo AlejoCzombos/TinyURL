@@ -45,13 +45,17 @@ public class UrlMongoDBAdapter implements UrlRepositoryPort {
             throw new UrlHasExpiredException(UrlHasExpiredException.MESSAGE_URL_HAS_EXPIRED);
         }
 
+        // Actualizar el numero de visitas para el recuento total
+        url.setHit(url.getHit() + 1);
+        repository.save(url);
+
         return UrlEntityMapper.toDomain(url);
     }
 
     @Override
     public Url createUrl(Url url) {
-        if (repository.existsByAlias(url.getAlias())) {
-            throw new AliasAlreadyExistsException(AliasAlreadyExistsException.MESSAGE_ALIAS_ALREADY_EXISTS);
+        if (checkExistsByAlias(url.getAlias())) {
+            throw new UrlNotFoundException(UrlNotFoundException.URL_NOT_FOUND + url.getAlias());
         }
 
         UrlEntity urlToSave = UrlEntityMapper.toEntity(url);
@@ -66,10 +70,9 @@ public class UrlMongoDBAdapter implements UrlRepositoryPort {
 
     @Override
     public Url updateUrl(Url url, String key) {
-        if (repository.existsByAlias(url.getAlias())) {
-            throw new AliasAlreadyExistsException(AliasAlreadyExistsException.MESSAGE_ALIAS_ALREADY_EXISTS);
+        if (checkExistsByAlias(key)) {
+            throw new UrlNotFoundException(UrlNotFoundException.URL_NOT_FOUND + key);
         }
-        checkExistsByKey(key);
 
         UrlEntity urlToUpdate = UrlEntityMapper.toEntity(url);
 
@@ -89,10 +92,8 @@ public class UrlMongoDBAdapter implements UrlRepositoryPort {
         return UrlEntityMapper.toDomain(null);
     }
 
-    private void checkExistsByKey(String key){
-        if(repository.existsByKey(key)){
-            throw new UrlNotFoundException(UrlNotFoundException.URL_NOT_FOUND + key);
-        }
+    private boolean checkExistsByAlias(String alias){
+        return repository.existsByAlias(alias);
     }
 
     private String generateKey(String url){
