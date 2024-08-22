@@ -55,7 +55,7 @@ public class UrlMongoDBAdapter implements UrlRepositoryPort {
     @Override
     public Url createUrl(Url url) {
         if (checkExistsByAlias(url.getAlias())) {
-            throw new UrlNotFoundException(UrlNotFoundException.URL_NOT_FOUND + url.getAlias());
+            throw new AliasAlreadyExistsException(AliasAlreadyExistsException.MESSAGE_ALIAS_ALREADY_EXISTS);
         }
 
         UrlEntity urlToSave = UrlEntityMapper.toEntity(url);
@@ -71,7 +71,7 @@ public class UrlMongoDBAdapter implements UrlRepositoryPort {
     @Override
     public Url updateUrl(Url url, String key) {
         if (checkExistsByAlias(key)) {
-            throw new UrlNotFoundException(UrlNotFoundException.URL_NOT_FOUND + key);
+            throw new AliasAlreadyExistsException(AliasAlreadyExistsException.MESSAGE_ALIAS_ALREADY_EXISTS);
         }
 
         UrlEntity urlToUpdate = UrlEntityMapper.toEntity(url);
@@ -84,7 +84,7 @@ public class UrlMongoDBAdapter implements UrlRepositoryPort {
     @Override
     public Url deleteUrl(String key) {
         UrlEntity urlToDelete = repository.findById(key).orElseThrow(
-                () -> new RuntimeException("Url not found with ID: " + key)
+                () -> new UrlNotFoundException(UrlNotFoundException.URL_NOT_FOUND + key)
         );
 
         repository.delete(urlToDelete);
