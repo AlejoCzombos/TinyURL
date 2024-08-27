@@ -1,4 +1,4 @@
-package com.example.tiny_url.MongoDbAdapter;
+package com.example.tiny_url.infrastucture.adapter.repository;
 
 import com.example.tiny_url.infrastructure.adapter.entity.UrlEntity;
 import com.example.tiny_url.infrastructure.adapter.repository.UrlMongoDBRepository;
