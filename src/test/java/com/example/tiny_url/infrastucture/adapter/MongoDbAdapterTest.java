@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +36,14 @@ public class MongoDbAdapterTest {
     public void setUp() {
         url = Url.builder().alias("alias").url("url").key("key").createdAt(LocalDateTime.of(2024,10,20,0,0)).build();
         urlEntity = UrlEntity.builder().alias("alias").url("url").key("key").createdAt(LocalDateTime.of(2024,10,20,0,0)).build();
+    }
+
+    @Test
+    public void findAll_returnAllUrls_whenUrlsExists() {
+        when(repository.findAll()).thenReturn(List.of(urlEntity));
+
+        Assertions.assertEquals(List.of(url), adapter.findAll());
+        verify(repository, times(1)).findAll();
     }
 
     @Test
