@@ -54,14 +54,18 @@ public class UrlMongoDBAdapter implements UrlRepositoryPort {
 
     @Override
     public Url createUrl(Url url) {
-        if (checkExistsByAlias(url.getAlias())) {
+        if (url.getAlias() != null && checkExistsByAlias(url.getAlias())) {
             throw new AliasAlreadyExistsException(AliasAlreadyExistsException.MESSAGE_ALIAS_ALREADY_EXISTS);
         }
 
         UrlEntity urlToSave = UrlEntityMapper.toEntity(url);
 
-        urlToSave.setCreatedAt(LocalDateTime.now());
-        urlToSave.setKey(generateKey(urlToSave.getUrl()));
+        if (urlToSave.getKey() == null || urlToSave.getKey().isEmpty()) {
+            urlToSave.setKey(generateKey(urlToSave.getUrl()));
+        }
+        if (urlToSave.getCreatedAt() == null) {
+            urlToSave.setCreatedAt(LocalDateTime.now());
+        }
 
         UrlEntity urlSaved = repository.save(urlToSave);
 
@@ -70,26 +74,37 @@ public class UrlMongoDBAdapter implements UrlRepositoryPort {
 
     @Override
     public Url updateUrl(Url url, String key) {
-        if (checkExistsByAlias(key)) {
-            throw new AliasAlreadyExistsException(AliasAlreadyExistsException.MESSAGE_ALIAS_ALREADY_EXISTS);
+        UrlEntity existingUrl = repository.findByKeyOrAlias(key).orElseThrow(
+                () -> new UrlNotFoundException(UrlNotFoundException.URL_NOT_FOUND + key)
+        );
+
+        if (url.getAlias() != null && !url.getAlias().isEmpty()) {
+
+            if (checkExistsByAlias(url.getAlias())) {
+                throw new AliasAlreadyExistsException(AliasAlreadyExistsException.MESSAGE_ALIAS_ALREADY_EXISTS);
+            }
+            existingUrl.setAlias(url.getAlias());
+        }
+        if (url.getUrl() != null && !url.getUrl().isEmpty()) {
+            existingUrl.setUrl(url.getUrl());
+        }
+        if (url.getExpiresAt() != null) {
+            existingUrl.setExpiresAt(url.getExpiresAt());
         }
 
-        UrlEntity urlToUpdate = UrlEntityMapper.toEntity(url);
-
-        UrlEntity urlUpdated = repository.save(urlToUpdate);
-
+        UrlEntity urlUpdated = repository.save(existingUrl);
         return UrlEntityMapper.toDomain(urlUpdated);
     }
 
     @Override
     public Url deleteUrl(String key) {
-        UrlEntity urlToDelete = repository.findById(key).orElseThrow(
+        UrlEntity urlToDelete = repository.findByKeyOrAlias(key).orElseThrow(
                 () -> new UrlNotFoundException(UrlNotFoundException.URL_NOT_FOUND + key)
         );
 
         repository.delete(urlToDelete);
 
-        return UrlEntityMapper.toDomain(null);
+        return UrlEntityMapper.toDomain(new UrlEntity());
     }
 
     private boolean checkExistsByAlias(String alias){

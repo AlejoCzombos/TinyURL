@@ -23,8 +23,8 @@ public class UrlController implements UrlControllerApi {
     }
 
     @Override
-    public ResponseEntity<UrlDto> getUrlByIdOrAlias(String id) {
-        return new ResponseEntity<>(service.findByKeyOrAlias(id), HttpStatus.OK);
+    public ResponseEntity<UrlDto> getUrlByIdOrAlias(String key) {
+        return new ResponseEntity<>(service.findByKeyOrAlias(key), HttpStatus.OK);
     }
 
     @Override
@@ -33,12 +33,12 @@ public class UrlController implements UrlControllerApi {
     }
 
     @Override
-    public ResponseEntity<UrlDto> updateUrlById(String id, UrlUpdate request) {
-        return new ResponseEntity<>(service.updateUrl(request, id), HttpStatus.OK);
+    public ResponseEntity<UrlDto> updateUrlById(String key, UrlUpdate request) {
+        return new ResponseEntity<>(service.updateUrl(request, key), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<UrlDto> deleteUrlById(String id) {
-        return new ResponseEntity<>(service.deleteUrl(id), HttpStatus.NO_CONTENT);
+    public ResponseEntity<UrlDto> deleteUrlById(String key) {
+        return new ResponseEntity<>(service.deleteUrl(key), HttpStatus.NO_CONTENT);
     }
 }
