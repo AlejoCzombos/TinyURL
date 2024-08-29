@@ -1,29 +1,38 @@
-package com.example.tiny_url.domain.model.dto;
+package com.example.tiny_url.domain.model;
 
-import com.example.tiny_url.domain.model.dto.request.UrlCreate;
+import com.example.tiny_url.domain.model.Url;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class UrlCreateTest {
+public class UrlTest {
 
     @Test
     public void testEqualsAndHashCode() {
-        UrlCreate url1 = new UrlCreate().builder()
+        Url url1 = new Url().builder()
+                .key("key")
                 .alias("alias")
                 .url("url")
                 .expiresAt(null)
+                .createdAt(null)
+                .hit(0)
                 .build();
-        UrlCreate url2 = new UrlCreate().builder()
+        Url url2 = new Url().builder()
+                .key("key")
                 .alias("alias")
                 .url("url")
                 .expiresAt(null)
+                .createdAt(null)
+                .hit(0)
                 .build();
-        UrlCreate url3 = new UrlCreate().builder()
+        Url url3 = new Url().builder()
+                .key("key")
                 .alias("diferentAlias")
                 .url("url")
                 .expiresAt(null)
+                .createdAt(null)
+                .hit(0)
                 .build();
 
         // Reflexividad
@@ -49,13 +58,16 @@ public class UrlCreateTest {
 
     @Test
     public void testToString() {
-        UrlCreate url = new UrlCreate().builder()
+        Url url = new Url().builder()
+                .key("key")
                 .alias("alias")
                 .url("url")
                 .expiresAt(null)
+                .createdAt(null)
+                .hit(0)
                 .build();
-        String expected = "UrlCreate(url=url, alias=alias, expiresAt=null)";
-        assertEquals(expected, url.toString());
+
+        assertEquals("Url(key=key, url=url, alias=alias, hit=0, expiresAt=null, createdAt=null)", url.toString());
     }
 
 }
