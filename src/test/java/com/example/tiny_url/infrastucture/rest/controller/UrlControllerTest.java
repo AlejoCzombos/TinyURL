@@ -5,15 +5,15 @@ import com.example.tiny_url.domain.model.dto.request.UrlCreate;
 import com.example.tiny_url.domain.model.dto.request.UrlUpdate;
 import com.example.tiny_url.domain.port.service.UrlService;
 import com.example.tiny_url.infrastructure.rest.controller.UrlController;
+import com.example.tiny_url.infrastructure.rest.interceptor.exception.AliasAlreadyExistsException;
+import com.example.tiny_url.infrastructure.rest.interceptor.exception.UrlHasExpiredException;
+import com.example.tiny_url.infrastructure.rest.interceptor.exception.UrlNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -82,6 +82,43 @@ public class UrlControllerTest {
     }
 
     @Test
+    public void getUrlByIdOrAlias_throwUrlNotFoundException_whenUrlDoesNotExist() throws Exception {
+        when(service.findByKeyOrAlias(key)).thenThrow(new UrlNotFoundException(UrlNotFoundException.URL_NOT_FOUND + key));
+
+        ResultActions results = mockMvc.perform(get("/api/urls/{key}", key)
+                .contentType("application/json")
+        );
+
+        results.andExpect(
+                status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    public void getUrlByIdOrAlias_throwUrlHasExpiredException_whenUrlHasExpired() throws Exception {
+        when(service.findByKeyOrAlias(key)).thenThrow(new UrlHasExpiredException(UrlHasExpiredException.MESSAGE_URL_HAS_EXPIRED));
+
+        ResultActions results = mockMvc.perform(get("/api/urls/{key}", key)
+                .contentType("application/json")
+        );
+
+        results.andExpect(
+                status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    public void any_throwInternalServerError_whenPathIsInvalid() throws Exception {
+        ResultActions results = mockMvc.perform(get("/api/invalid")
+                .contentType("application/json")
+        );
+
+        results.andExpect(
+                status().isInternalServerError())
+                .andDo(print());
+    }
+
+    @Test
     public void createUrl_returnUrl_whenUrlIsCreated() throws Exception {
         when(service.createUrl(urlCreate)).thenReturn(urlDto);
 
@@ -94,6 +131,20 @@ public class UrlControllerTest {
                 status().isCreated())
                 .andExpect(jsonPath("$.alias").value(urlDto.getAlias()))
                 .andExpect(jsonPath("$.url").value(urlDto.getUrl()))
+                .andDo(print());
+    }
+
+    @Test
+    public void createUrl_throwAliasAlreadyExistsException_whenAliasAlreadyExists() throws Exception {
+        when(service.createUrl(urlCreate)).thenThrow(new AliasAlreadyExistsException(AliasAlreadyExistsException.MESSAGE_ALIAS_ALREADY_EXISTS));
+
+        ResultActions results = mockMvc.perform(post("/api/urls/")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(urlCreate))
+        );
+
+        results.andExpect(
+                status().isBadRequest())
                 .andDo(print());
     }
 
