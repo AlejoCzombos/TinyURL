@@ -3,6 +3,7 @@ package com.example.tiny_url.infrastucture.adapter;
 import com.example.tiny_url.domain.model.Url;
 import com.example.tiny_url.infrastructure.adapter.UrlMongoDBAdapter;
 import com.example.tiny_url.infrastructure.adapter.entity.UrlEntity;
+import com.example.tiny_url.infrastructure.adapter.mapper.UrlEntityMapper;
 import com.example.tiny_url.infrastructure.adapter.repository.UrlMongoDBRepository;
 import com.example.tiny_url.infrastructure.rest.interceptor.exception.AliasAlreadyExistsException;
 import com.example.tiny_url.infrastructure.rest.interceptor.exception.UrlHasExpiredException;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.*;
 
@@ -36,13 +38,16 @@ public class MongoDbAdapterTest {
     public void setUp() {
         url = Url.builder().alias("alias").url("url").key("key").createdAt(LocalDateTime.of(2024,10,20,0,0)).build();
         urlEntity = UrlEntity.builder().alias("alias").url("url").key("key").createdAt(LocalDateTime.of(2024,10,20,0,0)).build();
+        reset(repository);
     }
 
     @Test
     public void findAll_returnAllUrls_whenUrlsExists() {
         when(repository.findAll()).thenReturn(List.of(urlEntity));
 
-        Assertions.assertEquals(List.of(url), adapter.findAll());
+        List<Url> urls = adapter.findAll();
+
+        Assertions.assertEquals(List.of(url), urls);
         verify(repository, times(1)).findAll();
     }
 
@@ -95,6 +100,28 @@ public class MongoDbAdapterTest {
     }
 
     @Test
+    public void createUrl_returnCreatedUrlWithKeyAndCreatedAt_whenKeyAndCreatedAtIsNull() {
+        Url urlMock = mock(Url.class);
+        when(urlMock.getAlias()).thenReturn("alias");
+
+        UrlEntity urlEntityMock = mock(UrlEntity.class);
+        when(urlEntityMock.getKey()).thenReturn(null);
+        when(urlEntityMock.getCreatedAt()).thenReturn(null);
+        doNothing().when(urlEntityMock).setKey(anyString());
+        doNothing().when(urlEntityMock).setCreatedAt(any());
+
+        UrlEntityMapper UrlEntityMapper = mock(UrlEntityMapper.class);
+        MockedStatic<UrlEntityMapper> mapperMocked = mockStatic(UrlEntityMapper.class);
+        mapperMocked.when(() -> UrlEntityMapper.toEntity(urlMock)).thenReturn(urlEntityMock);
+        when(repository.save(any())).thenReturn(urlEntityMock);
+
+        Url urlCreated = adapter.createUrl(urlMock);
+        verify(urlEntityMock, times(1)).setKey(anyString());
+        verify(urlEntityMock, times(1)).setCreatedAt(any());
+        mapperMocked.close();
+    }
+
+    @Test
     void createUrl_throwAliasAlreadyExistsException_whenAliasAlreadyExists(){
         when(repository.existsByAlias(url.getAlias())).thenReturn(true);
 
@@ -114,6 +141,8 @@ public class MongoDbAdapterTest {
 
     @Test
     void updateUrl_returnUpdatedUrl(){
+        urlEntity.setExpiresAt(LocalDateTime.of(2030,10,20,0,0));
+        url.setExpiresAt(LocalDateTime.of(2030,10,20,0,0));
         when(repository.findByKeyOrAlias(url.getKey())).thenReturn(Optional.of(urlEntity));
         when(repository.save(urlEntity)).thenReturn(urlEntity);
 
