@@ -38,21 +38,19 @@ pipeline {
     post {
         success {
             echo 'Build and Deploy succeeded!'
-            withCredentials([string(credentialsId: 'trello_api_key', variable: 'TRELLO_API_KEY'), string(credentialsId: 'trello_token', variable: 'TRELLO_TOKEN')]) {
-                sh """
-                    curl -X POST \
-                    'https://api.trello.com/1/cards?key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}&idList=${TRELLO_LIST_ID}&name=Build%20Success&desc=The%20build%20and%20deployment%20was%20successful!' \
-                    -H 'Content-Type: application/json'
-                """
-               }
+            sh '''
+                curl -X POST \
+                'https://api.trello.com/1/cards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN&idList=$TRELLO_LIST_ID&name=Build%20Success&desc=The%20build%20and%20deployment%20was%20successful!' \
+                -H 'Content-Type: application/json'
+            '''
         }
         failure {
             echo 'Build or Deploy failed!'
-            sh """
+            sh '''
                 curl -X POST \
-                'https://api.trello.com/1/cards?key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}&idList=${TRELLO_LIST_ID}&name=Build%20Failure&desc=The%20build%20or%20deployment%20failed.%20Please%20check%20the%20logs.' \
+                'https://api.trello.com/1/cards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN&idList=$TRELLO_LIST_ID&name=Build%20Failure&desc=The%20build%20or%20deployment%20failed.%20Please%20check%20the%20logs.' \
                 -H 'Content-Type: application/json'
-            """
+            '''
         }
     }
 }
