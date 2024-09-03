@@ -31,7 +31,12 @@ pipeline {
 
     post {
         success {
+            environment
+            {
+                trello_api = credentials('trello-api-key')
+            }
             echo 'Build and Deploy succeeded!'
+            echo 'api-key: $trello_api'
             withCredentials([string(credentialsId: 'trello-api-key', variable: 'TRELLO_API_KEY'), string(credentialsId: 'trello-token', variable: 'TRELLO_TOKEN')]) {
                 echo 'api-key: %TRELLO_API_KEY%'
                 echo 'api-key: ${TRELLO_API_KEY}'
@@ -39,7 +44,7 @@ pipeline {
                 echo 'api-key: $TRELLO_API_KEY'
                 bat '''
                     curl -X POST \
-                    "https://api.trello.com/1/cards?key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}&idList=66d70b9ed03f861e27e9fb2b&name=Build%20Success&desc=The%20build%20and%20deployment%20was%20successful!" \
+                    "https://api.trello.com/1/cards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN&idList=66d70b9ed03f861e27e9fb2b&name=Build%20Success&desc=The%20build%20and%20deployment%20was%20successful!" \
                     -H "Content-Type: application/json"
                 '''
             }
