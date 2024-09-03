@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        TRELLO_API_KEY_ENV = credentials('trello-api-key')
+        TRELLO_TOKEN_ENV = credentials('trello-token')
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -9,6 +14,8 @@ pipeline {
         }
         stage('Build') {
             steps {
+                echo 'trello: $TRELLO_API_KEY_ENV'
+                echo 'trello: ${TRELLO_API_KEY_ENV}'
                 bat 'mvn clean install'
             }
         }
@@ -31,20 +38,11 @@ pipeline {
 
     post {
         success {
-            environment
-            {
-                trello_api = credentials('trello-api-key')
-            }
             echo 'Build and Deploy succeeded!'
-            echo 'api-key: $trello_api'
             withCredentials([string(credentialsId: 'trello-api-key', variable: 'TRELLO_API_KEY'), string(credentialsId: 'trello-token', variable: 'TRELLO_TOKEN')]) {
-                echo 'api-key: %TRELLO_API_KEY%'
-                echo 'api-key: ${TRELLO_API_KEY}'
-                echo 'api-key: ${env.TRELLO_API_KEY}'
-                echo 'api-key: $TRELLO_API_KEY'
                 bat '''
                     curl -X POST \
-                    "https://api.trello.com/1/cards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN&idList=66d70b9ed03f861e27e9fb2b&name=Build%20Success&desc=The%20build%20and%20deployment%20was%20successful!" \
+                    'https://api.trello.com/1/cards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN&idList=66d70b9ed03f861e27e9fb2b&name=Build%20Success&desc=The%20build%20and%20deployment%20was%20successful!' \
                     -H "Content-Type: application/json"
                 '''
             }
