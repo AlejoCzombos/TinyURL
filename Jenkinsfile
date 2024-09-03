@@ -1,5 +1,6 @@
 pipeline {
     agent any
+    
     environment {
             TRELLO_API_KEY = credentials('trello_api_key')
             TRELLO_TOKEN = credentials('trello_token')
