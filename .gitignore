@@ -1,4 +1,9 @@
 HELP.md
+
+# Exclude the package file
+!target/tiny_url-1.0.jar
+!target/tiny_url-1.0.jar.original
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
