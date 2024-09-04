@@ -1,10 +1,11 @@
 HELP.md
 
 # Exclude the package file
+target/*
 !target/tiny_url-1.0.jar
 !target/tiny_url-1.0.jar.original
+!target/jacoco.exec
 
-target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
