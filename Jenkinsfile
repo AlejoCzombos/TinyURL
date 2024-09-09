@@ -12,19 +12,39 @@ pipeline {
                 bat 'mvn clean install'
             }
         }
-        stage('Test') {
-            steps {
-                bat 'mvn test'
-            }
-        }
+//         stage('Test') {
+//             steps {
+//                 bat 'mvn test'
+//             }
+//         }
         stage('Package') {
             steps {
                 bat 'mvn package'
             }
         }
-        stage('Deploy') {
+        stage('Commit Package') {
             steps {
-                echo "Deploying..."
+                // Agregar el package al repositorio
+                sh 'git add target/*'
+                sh 'git commit -m "Agregar el package generado por Jenkins"'
+            }
+        }
+        stage('Push to Git Repository'){
+            steps {
+                withCredentials([gitUsernamePassword(credentialsId: 'github-token', gitToolName: 'Default')]) {
+                    sh 'git push origin main'
+                }
+            }
+        }
+        stage('Deploy to Render') {
+            steps {
+                withCredentials([string(credentialsId: 'deploy-render-hook', variable: 'DEPLOY_RENDER_HOOK')]) {
+                    //
+                    bat '''
+                        curl -X POST \
+                        "%DEPLOY_RENDER_HOOK%"
+                    '''
+                }
             }
         }
     }
