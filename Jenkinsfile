@@ -2,22 +2,17 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Git Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/AlejoCzombos/TinyURL.git'
             }
         }
-        stage('Build') {
+        stage('Build Project') {
             steps {
                 bat 'mvn clean install'
             }
         }
-//         stage('Test') {
-//             steps {
-//                 bat 'mvn test'
-//             }
-//         }
-        stage('Package') {
+        stage('Run Tests and Generate Package') {
             steps {
                 bat 'mvn package'
             }
@@ -25,21 +20,21 @@ pipeline {
         stage('Commit Package') {
             steps {
                 // Agregar el package al repositorio
-                sh 'git add target/*'
-                sh 'git commit -m "Agregar el package generado por Jenkins"'
+                bat 'git add target/*'
+                bat 'git commit -m "Agregar el package generado por Jenkins"'
             }
         }
         stage('Push to Git Repository'){
             steps {
                 withCredentials([gitUsernamePassword(credentialsId: 'github-token', gitToolName: 'Default')]) {
-                    sh 'git push origin main'
+                    bat 'git push origin main'
                 }
             }
         }
         stage('Deploy to Render') {
             steps {
                 withCredentials([string(credentialsId: 'deploy-render-hook', variable: 'DEPLOY_RENDER_HOOK')]) {
-                    //
+                    // Curl al hook de Render para ejecutar el deploy
                     bat '''
                         curl -X POST \
                         "%DEPLOY_RENDER_HOOK%"
