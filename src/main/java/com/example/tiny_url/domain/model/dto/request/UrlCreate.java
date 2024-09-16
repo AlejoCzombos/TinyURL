@@ -18,7 +18,6 @@ public class UrlCreate {
     @Size(min = 5, max = 80, message = "The URL must be between 5 and 80 characters.")
     private String url;
 
-    @NotBlank(message = "The alias must not be blank.")
     @Size(max = 25, message = "The alias must be less than 25 characters.")
     private String alias;
 
