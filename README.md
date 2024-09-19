@@ -1,8 +1,24 @@
-# TinyURL
+# 🔗 TinyURL - Acortador de URLs ✂️
 
-Este es un proyecto de acortador de URLs usando Spring Boot con Java y MongoDB utilizando arquitectura hexagonal.
+## Descripción del Proyecto
+Este proyecto es un acortador de URLs que permite a los usuarios acortar URLs largas y personalizarlas con un alias único. Además, los usuarios pueden establecer una fecha de expiración y gestionar todas sus URLs de forma eficiente.
 
-## Índice
+## Enlaces 
+🚀 Deploy Front : https://tinyurl.alejoczombos.com.ar
+🚀 Deploy Docs : https://tinyurl-back.alejoczombos.com.ar/docs
+(¡El enlace lleva a la API donde puedes probar los endpoints y ver la documentación en tiempo real!) *Demora un poco en cargar al principio por el hosting*
+
+## 🛠️ Tecnologías Utilizadas
+
+- Backend:
+    - Java ☕
+    - Spring Boot 🌱
+    - MongoDB 🗄️
+    - Lombok 🔧
+    - JUnit + Mockito 🧪
+    - Swagger 📝
+
+## 🗂️ Índice
 
 - [Descripción del Proyecto](#descripción-del-proyecto)
 - [Tecnologías Utilizadas](#tecnologías-utilizadas)
@@ -19,33 +35,21 @@ Este es un proyecto de acortador de URLs usando Spring Boot con Java y MongoDB u
     - [Endpoint de Redirección](#endpoint-de-redirección)
         - [Redirect](#redirect)
 
-## Descripción del Proyecto
+## ⚙️ Configuración del Entorno
 
-Este proyecto es un acortador de URLs que permite a los usuarios acortar URLs largas y personalizarlas con un alias único. Además, los usuarios pueden establecer una fecha de expiración.
-
-## Tecnologías Utilizadas
-
-- Backend:
-    - Java
-    - Spring Boot
-    - MongoDB
-    - Lombok
-    - JUnit
-    - Mockito
-    - Swagger
-
-## Configuración del Entorno
-
-1. Clona el repositorio
-2. Abre el proyecto en tu IDE favorito
+1. Clona el repositorio.
+2. Abre el proyecto en tu IDE favorito 💻.
 3. Configura la conexión a la base de datos MongoDB en `application.properties`
 ````properties
 spring.data.mongodb.uri=mongodb://localhost:27017/tinyurl
 ````
-4. Ejecuta la aplicación
-5. Accede a la documentación de la API en `http://localhost:8080/docs`
+4. Ejecuta la aplicación 🚀:
+```bash
+./mvnw spring-boot:run
+```
+6. Accede a la documentación de la API en `http://localhost:8080/docs`
 
-## Descripción de Entidades
+## 📚 Descripción de Entidades
 
 ### URL
 Descripción: Representa una URL acortada en el sistema.
@@ -61,12 +65,12 @@ Atributos:
 
 ## API REST
 
-### Endpoints de URL
+### 🌐 API REST - Endpoints de URL
 
 | Método | Endpoint                  | Descripción                                  | Enlace Rápido               |
 |--------|---------------------------|----------------------------------------------|-----------------------------|
 | GET    | `api/urls/`               | Obtiene todas las URLs.                      | [Get All URLs](#get-all-urls)|
-| GET    | `api/urls/{key_or_alias}` | Obtiene una URL por ID o Alias.              | [Get URL by ID or Alias](#get-url-by-id-or-alias) |
+| GET    | `api/urls/{key_or_alias}` | Obtiene una URL por ID o Alias.              | [Get URL by key or Alias](#get-url-by-key-or-alias) |
 | POST   | `api/urls/`               | Crea una nueva URL.                          | [Create URL](#create-url)    |
 | PUT    | `api/urls/{key}`          | Actualiza una URL existente.                 | [Update URL](#update-url)    |
 | DELETE | `api/urls/{key}`          | Elimina una URL por su ID.                   | [Delete URL](#delete-url)    |
@@ -80,9 +84,9 @@ Atributos:
 - `200 OK`: Lista de URLs obtenida exitosamente.
 
 ### Get URL by Key or Alias
-**Endpoint:** `GET api/urls/{id_or_alias}`
+**Endpoint:** `GET api/urls/{key_or_alias}`
 
-**Descripción:** Obtiene una URL por su ID o Alias.
+**Descripción:** Obtiene una URL por su Key o Alias.
 
 **Parámetros:**
 - `key_or_alias`: String (Key o Alias de la URL)
