@@ -1,38 +1,52 @@
 # 🔗 TinyURL - Acortador de URLs ✂️
 
-## Descripción del Proyecto
+##  Descripción del Proyecto
 Este proyecto es un acortador de URLs que permite a los usuarios acortar URLs largas y personalizarlas con un alias único. Además, los usuarios pueden establecer una fecha de expiración y gestionar todas sus URLs de forma eficiente.
 
-## Enlaces 
-🚀 Deploy Front : https://tinyurl.alejoczombos.com.ar
+## 🔗 Enlaces
+
+🚀 Deploy Front : https://tinyurl.alejoczombos.com.ar 
+
 🚀 Deploy Docs : https://tinyurl-back.alejoczombos.com.ar/docs
-(¡El enlace lleva a la API donde puedes probar los endpoints y ver la documentación en tiempo real!) *Demora un poco en cargar al principio por el hosting*
+
+☝️(¡El enlace lleva a la API donde puedes probar los endpoints y ver la documentación en tiempo real!) *Demora un poco en cargar al principio por el hosting*
 
 ## 🛠️ Tecnologías Utilizadas
 
-- Backend:
-    - Java ☕
-    - Spring Boot 🌱
-    - MongoDB 🗄️
-    - Lombok 🔧
-    - JUnit + Mockito 🧪
-    - Swagger 📝
+- Java ☕
+- Spring Boot 🌱
+- MongoDB 🗄️
+- JUnit + Mockito 🧪
+- Swagger 📝
+- Jenkins 🚀
+- Docker 🐳
+
+## 🌟 Características Principales
+
+- Utilización de arquitectura hexagonal.
+- Base de datos MongoDB para almacenar las URLs.
+- API RESTful con documentación Swagger.
+- Pruebas unitarias con JUnit y Mockito.
+- Automatización de deployment con Jenkins y Docker.
+- Manejo de excepciones centralizado.
 
 ## 🗂️ Índice
 
-- [Descripción del Proyecto](#descripción-del-proyecto)
-- [Tecnologías Utilizadas](#tecnologías-utilizadas)
-- [Configuración del Entorno](#configuración-del-entorno)
-- [Descripción de Entidades](#descripción-de-entidades)
+- [Descripción del Proyecto 📖](#descripción-del-proyecto)
+- [Enlaces 🔗](#-enlaces)
+- [Tecnologías Utilizadas 🛠️](#-tecnologías-utilizadas)
+- [Características Principales 🌟](#-características-principales)
+- [Configuración del Entorno ⚙️](#-configuración-del-entorno)
+- [Descripción de Entidades 📚](#-descripción-de-entidades)
     - [URL](#url)
-- [API REST](#api-rest)
-    - [Endpoints de URL](#endpoints-de-url)
+- [API REST 🚀](#api-rest)
+    - [Endpoints de URL 🌐](#-api-rest---endpoints-de-url)
         - [Get All URLs](#get-all-urls)
         - [Get URL by id or Alias](#get-url-by-key-or-alias)
         - [Create a URL](#create-url)
         - [Update a URL by id](#update-url)
         - [Delete a URL by id](#delete-url)
-    - [Endpoint de Redirección](#endpoint-de-redirección)
+    - [Endpoint de Redirección 🌐](#endpoint-de-redirección)
         - [Redirect](#redirect)
 
 ## ⚙️ Configuración del Entorno
