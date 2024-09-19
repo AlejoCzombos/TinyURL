@@ -1,6 +1,6 @@
 # 🔗 TinyURL - Acortador de URLs ✂️
 
-##  Descripción del Proyecto
+## 📄 Descripción del Proyecto
 Este proyecto es un acortador de URLs que permite a los usuarios acortar URLs largas y personalizarlas con un alias único. Además, los usuarios pueden establecer una fecha de expiración y gestionar todas sus URLs de forma eficiente.
 
 ## 🔗 Enlaces
@@ -32,7 +32,7 @@ Este proyecto es un acortador de URLs que permite a los usuarios acortar URLs la
 
 ## 🗂️ Índice
 
-- [Descripción del Proyecto 📖](#descripción-del-proyecto)
+- [Descripción del Proyecto 📄](#descripción-del-proyecto)
 - [Enlaces 🔗](#-enlaces)
 - [Tecnologías Utilizadas 🛠️](#-tecnologías-utilizadas)
 - [Características Principales 🌟](#-características-principales)
